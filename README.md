@@ -1,15 +1,16 @@
 # 👋 Welcome to mcdev
 
-**If you loved** that thing that turned your idea into a real spec and then actually ran the tasks (requirements, design, tasks, build, update the checklist—the full loop)…  
-**If you loved** the idea of one spec to rule them all, but still being able to improve it without spawning five conflicting copies…  
-**If you loved** coding in an editor where the AI could both plan *and* execute with you instead of just talking about it…  
-**If you loved** using another bot to wordsmith the *perfect* prompt before pasting it into your coding AI (we’ve all been there)…  
-**If you’ve found** that giving agents clear steering (tech, architecture, product, project, structure, error handling) makes your work cleaner…  
+Sound familiar?
 
-**Or if you’re brand new** to all of this and have no idea where to start… 🌱
+- That thing that turned your idea into a real spec and then *actually ran* the tasks (requirements, design, tasks, build, update the checklist—the full loop).
+- The idea of one spec to rule them all, but still being able to improve it without spawning five conflicting copies.
+- Coding in an editor where the AI could both plan *and* execute with you instead of just talking about it.
+- Using another bot to wordsmith the *perfect* prompt before pasting it into your coding AI. (We’ve all been there.)
+- Finding that giving agents clear steering (tech, architecture, product, project, structure, error handling) makes your work cleaner.
 
-**This is that—just the great stuff.** 
-✨ All of it, in one place.
+**Or** you’re brand new to all of this and have no idea where to start. 🌱
+
+**This is that—just the great stuff.** ✨ All of it, in one place.
 
 ---
 
