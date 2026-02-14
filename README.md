@@ -2,6 +2,26 @@
 
 > **Spec-driven development in Cursor. Describe what you want; the agent turns it into requirements, design, and tasks—then you build.**
 
+## Install
+
+Run this from your **project root** (the folder you open in Cursor):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/thilina-chandrathilaka/mcdev/main/scripts/install-mcdev.sh | MCDEV_REPO=thilina-chandrathilaka/mcdev bash
+```
+
+This repo is public, so the one-liner works from any terminal with no token.
+
+## After installing
+
+1. Open your project in Cursor.
+2. In chat, type **mcdev-0-how-to-use** and hit enter. That's your memory refresher for all the commands.
+3. Run **mcdev-1-setup-start-here** so the agent can add steering (and optionally backfill specs for what you've already built). Then you're set.
+
+---
+
+## The Problem It Solves
+
 Sound familiar?
 
 - That thing that turned your idea into a real spec and then *actually ran* the tasks (requirements, design, tasks, build, update the checklist—the full loop).
@@ -10,28 +30,24 @@ Sound familiar?
 - Using another bot to wordsmith the *perfect* prompt before pasting it into your coding AI. (We've all been there.)
 - Finding that giving agents clear steering (tech, architecture, product, project, structure, error handling) makes your work cleaner.
 
-Or you're brand new to all of this and have no idea where to start. **This is that—just the great stuff.** All of it, in one place.
+Or you're brand new to all of this and have no idea where to start. 
+
+> **This is that—just the great stuff.** All of it, in one place.
 
 ---
 
-## ✨ Why it's awesome
+## Why it's awesome
 
-- **Prompt to spec, prompt to improve** — Not sure how to phrase your idea (or your improvement)? Use **mcdev-2-prompt-to-spec** and **mcdev-4-prompt-to-improve-feature**. The agent chats with you, shapes it into a clear prompt, and runs the right command.
-- **`.mcdev-steering`** — One setup gives the Cursor agent everything it needs: tech, architecture, product, project, structure, error handling. The agent reads it and follows it. No more repeating yourself.
-- **Specs stay the single source of truth** — When you run an improvement (mcdev-improve-feature), the improvement is merged back into the original spec and archived. Your main spec is always up to date. No drift, no duplicate truths.
-- **Steering stays in sync** — After every build you run with mcdev, `.mcdev-steering` is refreshed from your project. The agent's context never goes stale.
-
----
-
-## 💡 Why "mc"?
-
-**mc** is short for **malchan**—a mix of my mom's and dad's names. I've always wanted to build things that help people solve real problems. mcdev is part of that: helping both vibe-coders and real-coders get the most out of AI coding tools.
-
-You can read the full story here: **[malchan.com/dev](https://malchan.com/dev)** (it's going to land on a 404 for now—I'll build that with mcdev later).
+| Feature | What it means |
+|--------|----------------|
+| **Prompt to spec, prompt to improve** | Not sure how to phrase your idea (or your improvement)? Use **mcdev-2-prompt-to-spec** and **mcdev-4-prompt-to-improve-feature**. The agent chats with you, shapes it into a clear prompt, and runs the right command. |
+| **`.mcdev-steering`** | One setup gives the Cursor agent everything it needs: tech, architecture, product, project, structure, error handling. The agent reads it and follows it. No more repeating yourself. |
+| **Specs stay the single source of truth** | When you run an improvement (mcdev-improve-feature), the improvement is merged back into the original spec and archived. Your main spec is always up to date. No drift, no duplicate truths. |
+| **Steering stays in sync** | After every build you run with mcdev, `.mcdev-steering` is refreshed from your project. The agent's context never goes stale. |
 
 ---
 
-## 📦 What you get
+## What you get
 
 Once mcdev is in your project, Cursor understands a small set of **slash-style commands** you can type in chat. They give you:
 
@@ -43,44 +59,34 @@ Your project stays in charge: mcdev follows your **project rules** (tech, archit
 
 ---
 
-## 📖 Commands
+## Commands
 
 | Command | What it does |
 |--------|----------------|
 | **mcdev-0-how-to-use** | Your go-to reminder. Run this anytime to see what all the mcdev commands do. |
-| **mcdev-1-setup-start-here** | Run once on a folder. Empty project? The agent asks what tech you want (or picks for you) and creates steering files. Already have code? It can add steering and backfill specs for what you've built, then show you the rest. *Highly recommended* so the agent can work with you properly. |
-| **mcdev-2-prompt-to-spec** | Not sure how to phrase your idea? Chat for a message or two; the agent shapes it into a clear prompt and offers to create the spec. Say yes and it runs mcdev-create-spec with that. |
-| **mcdev-create-spec** [description] | You describe a feature; the agent writes requirements, then design, then a step-by-step task list. You approve after each part. |
-| **mcdev-3-build** [feature-name] | You give the name of a spec; the agent runs the tasks, runs tests, and tells you what was built and where. |
-| **mcdev-4-prompt-to-improve-feature** | Not sure which feature or how to phrase the improvement? The agent asks which feature, finds (or backfills) the spec, shapes your improvement into a prompt, then runs mcdev-improve-feature when you say yes. |
-| **mcdev-improve-feature** [feature-name] | You pick a spec and say what you want to improve. The agent drafts a small improvement (requirements, design, tasks) with your approval at each step. When you run it and it's done, the improvement is merged into the original spec and archived. One source of truth. |
-| **mcdev-update-steering** | Refreshes all files in `.mcdev-steering` from your current project. Run anytime; the agent also runs it automatically after each build. |
+| **mcdev-1-setup-start-here** | Run once on a folder.<br>• Empty project? The agent asks what tech you want (or picks for you) and creates steering files.<br>• Already have code? It can add steering and backfill specs for what you've built, then show you the rest. *Highly recommended* so the agent can work with you properly. |
+| **mcdev-2-prompt-to-spec** | Not sure how to phrase your idea?<br>• Chat for a message or two; the agent shapes it into a clear prompt and offers to create the spec.<br>• Say yes and it runs mcdev-create-spec with that. |
+| **mcdev-create-spec** `[description]` | You describe a feature; the agent writes requirements, then design, then a step-by-step task list. You approve after each part. |
+| **mcdev-3-build** `[feature-name]` | You give the name of a spec; the agent runs the tasks, runs tests, and tells you what was built and where. |
+| **mcdev-4-prompt-to-improve-feature** | Not sure which feature or how to phrase the improvement?<br>• The agent asks which feature, finds (or backfills) the spec, shapes your improvement into a prompt, then runs mcdev-improve-feature when you say yes. |
+| **mcdev-improve-feature** `[feature-name]` | You pick a spec and say what you want to improve.<br>• The agent drafts a small improvement (requirements, design, tasks) with your approval at each step.<br>• When you run it and it's done, the improvement is merged into the original spec and archived. One source of truth. |
+| **mcdev-update-steering** | Refreshes all files in `.mcdev-steering` from your current project.<br>• Run anytime; the agent also runs it automatically after each build. |
 
 Placeholders like `[feature-name]` and `[description]` are just that—replace them with your actual feature name or description.
 
 ---
 
-## 🚀 Install
+## Updates & Install
 
-Run this from your **project root** (the folder you open in Cursor):
+Re-run the same command anytime to update—your .cursorrules merges cleanly without overwriting your custom rules:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/thilina-chandrathilaka/mcdev/main/scripts/install-mcdev.sh | MCDEV_REPO=thilina-chandrathilaka/mcdev bash
 ```
 
-This repo is public, so the one-liner works from any terminal with no token.
-
 ---
 
-## ✅ After installing
-
-1. Open your project in Cursor.
-2. In chat, type **mcdev-0-how-to-use** and hit enter. That's your memory refresher for all the commands.
-3. Run **mcdev-1-setup-start-here** so the agent can add steering (and optionally backfill specs for what you've already built). Then you're set.
-
----
-
-## 🔄 Re-run = update, don't overwrite
+## Re-run = update, don't overwrite
 
 You can run the same install command again anytime:
 
@@ -91,7 +97,15 @@ So you stay up to date without losing your other Cursor rules.
 
 ---
 
-## 📁 What's in this repo
+## 💡 Why "mc"?
+
+**mc** is short for **malchan**—a mix of my mom's and dad's names. I've always wanted to build things that help people solve real problems. mcdev is part of that: helping both vibe-coders and real-coders get the most out of AI coding tools.
+
+You can read the full story here: **[malchan.com/dev](https://malchan.com/dev)** (it's going to land on a 404 for now—I'll build that with mcdev later).
+
+---
+
+## What's in this repo
 
 - **`.cursor/`** — Rules, commands, and skills that power the mcdev workflow.
 - **`.cursorrules`** — The canonical mcdev block (with delimiters so we can merge it into your file).
