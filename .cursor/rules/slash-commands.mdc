@@ -1,0 +1,190 @@
+---
+description: Slash commands mcdev-0-how-to-use, mcdev-1-setup-start-here, mcdev-update-steering, mcdev-2-prompt-to-spec, mcdev-create-spec, mcdev-3-build, mcdev-4-prompt-to-improve-feature, and mcdev-improve-feature; treat user messages starting with these as commands
+alwaysApply: true
+---
+
+# Slash commands: mcdev-0-how-to-use, mcdev-1-setup-start-here, mcdev-update-steering, mcdev-2-prompt-to-spec, mcdev-create-spec, mcdev-3-build, mcdev-4-prompt-to-improve-feature, mcdev-improve-feature
+
+The **only** spec slash commands are these eight. Nothing else.
+
+## Slash Commands (recognize these — order: 0 → 1 → 2 → 3 → 4)
+
+| Command | Purpose |
+|---------|---------|
+| **mcdev-0-how-to-use** | **How to use:** Explain the mcdev commands in simple language. Mention that behavior follows the project setup (if any), otherwise best practices in software development. |
+| **mcdev-1-setup-start-here** | **Setup (start here):** Read project; if fresh → ask tech (or "you pick"), create .mcdev-steering/ with **all** steering files + cursor rules, show commands. If existing → ask OK to add .mcdev-steering; if yes → create/update **all** files in .mcdev-steering/ + backfill specs, show commands; if no → show commands. |
+| **mcdev-2-prompt-to-spec** | **Prompt → spec:** Chat with you to shape your idea into a clear prompt, then offer to run mcdev-create-spec with it. Fun, quick, no forms. |
+| **mcdev-3-build** `feature-name` | **Spec-build:** Run all tasks from that spec, then tests and full report. **After build completes:** run After-build .mcdev-steering refresh (all files + cursor rules). |
+| **mcdev-4-prompt-to-improve-feature** | **Prompt → improve:** Ask which feature to improve; find or create/backfill spec; shape improvement prompt; confirm and run mcdev-improve-feature with it. |
+| **mcdev-update-steering** | **Update .mcdev-steering:** When run, always update **all** files in .mcdev-steering/ (technology.md, coding-practices.md, project.md, product-info.md, structure.md, architecture.md, error-handling.md, and any other files in that folder). If .mcdev-steering/ missing → create it with all steering files. If exists → refresh every file; never partial. Run anytime; also run automatically after each build. |
+| **mcdev-create-spec** `feature-description` | **Spec-creation:** Create a new spec (Requirements → Design → Tasks, with approval after each phase). |
+| **mcdev-improve-feature** `feature-name` | **Spec-improve:** Check spec and build status; create an improvement spec (requirements → design → tasks, with approval); optionally run improvement build, then merge into original and archive. **After improvement build completes:** run After-build .mcdev-steering refresh (all files + cursor rules). |
+
+When the user's message **starts with** one of these (with or without a space after), treat it as a **slash command**: **mcdev-0-how-to-use**, **mcdev-1-setup-start-here**, **mcdev-update-steering**, **mcdev-2-prompt-to-spec**, **mcdev-create-spec**, **mcdev-3-build**, **mcdev-4-prompt-to-improve-feature**, **mcdev-improve-feature**. Match in that order so that `mcdev-0-how-to-use` and `mcdev-1-setup-start-here` are recognized correctly. Do not treat it as casual text.
+
+**When showing commands to the user:** Always use **square brackets** for placeholders (e.g. `mcdev-create-spec [feature description]`, `mcdev-3-build [feature-name]`). Do **not** use angle brackets (the &lt; and &gt; characters) — they often render as literal "&lt;" and "&gt;" in chat. Use only square brackets: [feature description], [feature-name], [name].
+
+**When presenting multiple examples or options to the user:** Use **markdown bullet points** so they render clearly in Cursor chat. For example: a short intro line, then a list like `- **React + TypeScript**` or `- **Option 1** — …`. Avoid long comma-separated runs; prefer bullets for three or more items.
+
+**Building and specs:** For all mcdev commands (setup, update-steering, create, build, improve) and when implementing tasks: **always follow project rules and instructions** (technology, architecture, design). Check .cursorrules, project docs, and existing specs. **If none are found**, follow **best practices in software development for the chosen technology**.
+
+**Spec location (important):** Do **not** define or hardcode folder creation in this rule. Always **follow the project's instructions and rules** (e.g. `.cursorrules`, project docs, or "File Locations" in this project) to determine where specs are stored. If the project has **no** instructions for where specs go, create specs at the **project root** following software development best practices (e.g. a dedicated `specs/[feature-name]/` directory at root).
+
+## mcdev-1-setup-start-here command
+
+**Trigger:** Message starts with `mcdev-1-setup-start-here` (with or without a space).
+
+**Action:** Run the setup workflow (see `.cursor/commands/mcdev-1-setup-start-here.md`):
+
+1. **Read the project folder** — Check if fresh (no app code, no .cursor/specs) or existing (has code/deps).
+2. **If fresh:** Ask user what technology to use (or "you pick"). If user gives technology → create **.mcdev-steering/** with **all** steering files: technology.md, coding-practices.md, project.md, product-info.md, structure.md, architecture.md, error-handling.md (and any other useful files for that setup). Add to cursor rules (e.g. rule to read .mcdev-steering/ for tech and practices). If user says "you pick" → ask what type of product they want → then create .mcdev-steering/ with **all** steering files, add to cursor rules. Then show mcdev-0-how-to-use, mcdev-create-spec, mcdev-3-build, mcdev-improve-feature and one-line how to use each.
+3. **If existing:** Present two options and WAIT: **Option 1 [Highly recommended! Helps me do things properly]:** Create .mcdev-steering from the codebase with **all** steering files (technology.md, coding-practices.md, project.md, product-info.md, structure.md, architecture.md, error-handling.md, and any other files in .mcdev-steering/ when present); add cursor rule; add backfilled specs for each built feature in .cursor/specs/[feature-name]/ (requirements, design, tasks, all tasks [x]). **Option 2:** Show mcdev commands and one-line summary for each only. Say: *"If you say no / skip setup, I'll only show you the mcdev commands and stop — but option 1 is the key to working well with me!"* **If no / option 2:** Show mcdev commands and how to use; stop. **If yes / option 1:** Create .mcdev-steering/ with **all** steering files (update all files in .mcdev-steering/ when needed), add to cursor rules; backfill specs for built features; then say "All set" and show mcdev commands and how to use.
+
+**Adding to cursor rules:** Create or update a rule that instructs the agent to read and follow `.mcdev-steering/` when present: technology.md, coding-practices.md, project.md, product-info.md, structure.md, architecture.md, error-handling.md.
+
+**Reference:** `.cursor/commands/mcdev-1-setup-start-here.md` for full workflow.
+
+## mcdev-update-steering command
+
+**Trigger:** Message starts with `mcdev-update-steering` (with or without a space).
+
+**Action:** Run the update workflow (see `.cursor/commands/mcdev-update-steering.md`):
+
+1. **If .mcdev-steering/ does not exist:** Create it from the codebase with **all** steering files: technology.md, coding-practices.md, project.md, product-info.md, structure.md, architecture.md, error-handling.md (and any other useful core files). Ensure cursor rules reference .mcdev-steering/. Report (friendly, first-person): "I've created .mcdev-steering. You can run mcdev-update-steering anytime to refresh it from the project."
+2. **If .mcdev-steering/ exists:** Always update **all** files in .mcdev-steering/ when this command runs—never a partial update. Go through the **project** (dependencies, config, source, .cursor/specs) and refresh **every** file: technology.md, coding-practices.md, project.md, product-info.md, structure.md (folder layout, key paths), architecture.md (overview, components, integration), error-handling.md (practices, patterns), and **any other files present** in .mcdev-steering/ (e.g. glossary.md). Apply updates directly; no approval needed. Report (friendly, first-person): "I've updated .mcdev-steering. All files are in sync with the project."
+
+**When to run:** User can run anytime. **After every build** (mcdev-3-build or improvement build), the agent **must** run the **After-build: .mcdev-steering refresh** (see below) so steering stays correct.
+
+**Reference:** `.cursor/commands/mcdev-update-steering.md`.
+
+## After-build: .mcdev-steering refresh (mandatory)
+
+**When:** After **every** build completes—whether from **mcdev-3-build** (main spec or tests-only run) or from an **improvement build** (mcdev-improve-feature → run improvement → merge/archive). This is **mandatory**, not optional.
+
+**What to do:** If **.mcdev-steering/** exists, run the **full** refresh (same logic as mcdev-update-steering):
+
+1. **Update every file in .mcdev-steering/** with the latest from the project. Go through the **entire project** (dependencies, config, source, .cursor/specs, build output) and refresh **each** of: **technology.md**, **coding-practices.md**, **project.md**, **product-info.md**, **structure.md**, **architecture.md**, **error-handling.md**, and **any other files present** in .mcdev-steering/ (e.g. glossary.md). Do not skip files; update all so the agent always sees the project's latest setup and info. Use the same content rules as in `.cursor/commands/mcdev-update-steering.md`.
+2. **Cursor rules:** Ensure a cursor rule still instructs the agent to read .mcdev-steering/ when present (e.g. `.cursor/rules/project-context.mdc`). If the rule is missing or doesn't reference .mcdev-steering/, create or update it so the agent is told to read technology.md, coding-practices.md, project.md, product-info.md, structure.md, architecture.md, error-handling.md (and that steering is kept in sync after builds).
+
+Apply this after: mcdev-3-build (step 4 "all tasks complete" and step 7 "after build completes"); mcdev-improve-feature step 9 (when improvement build completes).
+
+## mcdev-2-prompt-to-spec command
+
+**Trigger:** Message starts with `mcdev-2-prompt-to-spec` (with or without a space; user may type nothing or a short idea after it).
+
+**Action:** Run the prompt-to-spec workflow (see `.cursor/commands/mcdev-2-prompt-to-spec.md`):
+
+1. Use what they typed after the command (if anything) as the starting idea; otherwise ask once what they want to build.
+2. In 1–2 quick exchanges, shape their idea into a **clear, short prompt** (1–3 sentences) that works well for mcdev-create-spec. Don’t drag it out; avoid long checklists.
+3. Present the prompt in a friendly, first-person way so it feels like a good fit for their idea.
+4. Ask (first-person): *"Want me to create the spec from this? Just say yes and I'll run mcdev-create-spec with this prompt."* **STOP and WAIT**.
+5. **If they say yes (or equivalent):** Run **mcdev-create-spec** with the agreed prompt as the feature description—same workflow as the mcdev-create-spec command (Requirements → Design → Tasks, phase gating, project spec location).
+6. **If they say no:** Offer to tweak the prompt or stop.
+
+**Reference:** `.cursor/commands/mcdev-2-prompt-to-spec.md`.
+
+## mcdev-4-prompt-to-improve-feature command
+
+**Trigger:** Message starts with `mcdev-4-prompt-to-improve-feature` (with or without a space; user may type nothing or a feature name/idea after it).
+
+**Action:** Run the prompt-to-improve-feature workflow (see `.cursor/commands/mcdev-4-prompt-to-improve-feature.md`):
+
+1. Ask which feature they want to improve (or use what they typed). Normalize to kebab-case and look up the spec in the project's spec location (this project: `.cursor/specs/[feature-name]/`).
+2. **If no spec found:** Check the codebase; clarify with the user: (a) new feature → offer mcdev-2-prompt-to-spec then mcdev-create-spec, or (b) existing feature without spec → offer to backfill a spec (requirements, design, tasks from codebase, like setup backfill). **STOP and WAIT** for choice. If (b), run backfill then they can run this command again or continue to shape the improvement.
+3. **If spec found:** Confirm the spec; in 1–2 rounds shape their improvement idea into a short, clear improvement description; present it; ask (friendly): *"Want me to run mcdev-improve-feature with this?"* **STOP and WAIT**.
+4. **If they say yes:** Run **mcdev-improve-feature** with the feature name and the agreed improvement description (e.g. `mcdev-improve-feature [feature-name] [improvement description]`). Follow the full improve-feature workflow (requirements → design → tasks with approval, then suggest build).
+
+**Reference:** `.cursor/commands/mcdev-4-prompt-to-improve-feature.md`.
+
+## mcdev-create-spec command
+
+**Trigger:** Message starts with `mcdev-create-spec ` (e.g. `mcdev-create-spec simple calculator`, `mcdev-create-spec user auth`).
+
+**Action:**
+
+1. **Parse:** Take the rest of the message as the feature description. Convert to a **kebab-case** feature name (e.g. "user auth" → `user-auth`).
+2. **Spec directory:** Use the **project's instructions/rules** for where specs live. If none exist, use project root with best practices (e.g. `specs/[feature-name]/` at root). Create that directory if it does not exist.
+3. **Run the spec-creation workflow** (Requirements → Design → Tasks with phase gating). **In all steps**, follow **project rules and instructions** (tech, architecture, design); if the project has none, follow **best practices in software development for the technology chosen**. Apply **requirements, design, and task standards** (see .cursorrules):
+   - **Requirements:** Use EARS-style statements (WHEN [condition] THE SYSTEM SHALL [expected behavior]); testable, specific; include edge cases; organize by functional area. Ask clarifying questions, then create `requirements.md`. Present and say (friendly, first-person): *"Take a look at the requirements when you're ready—when you're happy with them, I'll move on to design."* End with **File to review:** [path to the file] (e.g. `.cursor/specs/[feature-name]/requirements.md`). Then **STOP and WAIT** for user approval.
+   - **Design:** After approval, read requirements and create `design.md` with architecture (integration points, diagrams as needed), components, data models, API/contract specs, at least one **Correctness Property**, testing strategy, error/security/performance. Present and say (friendly, first-person): *"Here's the design. When you've had a look and you're good with it, I'll create the tasks."* End with **File to review:** [path to design.md]. Then **STOP and WAIT**.
+   - **Tasks:** After approval, read design and create `tasks.md` with grouped, specific, verifiable tasks; link to requirements/properties; include testing and docs; mark optional with `*`. Present and say (friendly, first-person): *"Here's the task list. When you're ready to go, say the word and I'll start building."* End with **File to review:** [path to tasks.md]. Then **STOP and WAIT**.
+
+**Reference:** Use the **spec-creation** skill (`.cursor/skills/spec-creation/SKILL.md`) for full behavior.
+
+## mcdev-3-build command
+
+**Trigger:** Message starts with `mcdev-3-build ` (e.g. `mcdev-3-build simple-calculator`).
+
+**Action:**
+
+1. **Parse:** Extract the **feature name** (kebab-case) and, if present, the **build output folder** (e.g. "in a folder my-app" → outputDir `my-app`).
+2. **Locate spec:** Use the **project's instructions/rules** for where specs live. Resolve the spec directory; verify `requirements.md`, `design.md`, and `tasks.md` exist. Read all three. **Check last build:** if `last-build.json` exists in the spec directory, read it and note `builtAt` and `outputDir`.
+3. **Ask the user** (friendly, first-person): *"Should I complete all tasks (including optional) or skip optional tasks? Your call."* **STOP and WAIT** for the user's answer. If skip optional: run only tasks with status `[ ]` (not `[ ]*`). If all: run both `[ ]` and `[ ]*`. **Build location** for this run = user-specified folder from the message, or last-build.json’s outputDir, or default (e.g. feature name).
+4. **If all selected tasks are already complete:** Run the full test suite from the build location; report with **last build: time** (builtAt) and **location** (outputDir). Run **After-build: .mcdev-steering refresh** (see above). End (friendly, first-person) with *"Build complete! I've finished all tasks. Tests only (no pending tasks)."* Do not re-run tasks; do not overwrite last-build.json. **Otherwise** (there are incomplete tasks):
+5. **Otherwise** (incomplete tasks): **Create a to-do list in the chat** (e.g. using TodoWrite) with one item per selected task (short labels, e.g. "Task 1.1: Set up project structure"). Update it as you go: set the current task to in progress when starting, and to completed when done—same clear progress view as mcdev-create-spec. For each incomplete selected task in order: set status to `[-]` in tasks.md, update to-do (current → in progress), implement (following project rules/instructions for tech, architecture, design; else best practices for the technology), test, set status to `[x]` in tasks.md, update to-do (current → completed), report. When all done, run the full test suite from the build location; **write or update last-build.json** with `builtAt` (ISO 8601) and `outputDir`.
+6. **Full report:** Include **feature name**, **spec path**, **built at** (time) and **location** (outputDir), tasks completed, test run summary. End (friendly, first-person) with *"Build complete! I've finished all tasks."* or *"Build complete; tests failed: [brief summary]."*
+7. **After build completes:** Run **After-build: .mcdev-steering refresh** (see above)—update every file in .mcdev-steering/ and ensure cursor rules reference .mcdev-steering/.
+
+**Build record:** When a build completes, write **last-build.json** in the spec directory with **builtAt** (ISO 8601) and **outputDir** (build location). At the start of mcdev-3-build, read last-build.json if present to get last build time and location. If all selected tasks are already complete, run only tests from that location and report (include last build time and location); do not re-run tasks. See **.cursor/specs/README-build-record.md** for the file format.
+
+**Reference:** Use the **spec-execution** skill (`.cursor/skills/spec-execution/SKILL.md`) and **.cursor/specs/README-build-record.md**.
+
+## mcdev-improve-feature command
+
+**Trigger:** Message starts with `mcdev-improve-feature ` (e.g. `mcdev-improve-feature simple-calculator` or `mcdev-improve-feature simple-calculator add keyboard shortcuts`).
+
+**Action:** **First** check spec and build status; **then** either update the existing spec (if not built) or run the improvement flow (if built). Use the **same phase gating** as mcdev-create-spec: never proceed without explicit user confirmation.
+
+1. **Locate spec and read:** Use the **project's instructions** to resolve the spec directory for the feature name. Verify `requirements.md`, `design.md`, `tasks.md` exist. Read all three and, if present, `last-build.json` (builtAt, outputDir).
+2. **Check project folder:** Look for evidence the spec was **built**: last-build.json exists and has a valid outputDir; tasks.md has most or all tasks marked `[x]`; project folder contains implementation (e.g. the outputDir path exists with code, or source clearly matches the feature). If **no last-build.json**, or **outputDir missing/empty**, or **most tasks still `[ ]`** → treat as **spec not built**.
+3. **Report and decide:** Report (friendly, first-person): feature name, spec path, task summary (counts of [x], [ ], [ ]*), last build time and location (or "No previous build"). Then state whether the spec **was built** or **not built**. If **not built** → go to **Spec-update path** (steps A–D). If **built** → go to **Improvement path** (steps 4–8 below).
+
+**Spec-update path (spec not built)** — Update the **existing** spec in place; no improvement directory.
+
+- **A. Improvement focus:** If the user did not give an improvement/change description, ask what they want to change or add and **WAIT**.
+- **B. Requirements update:** Update **requirements.md** in the spec directory (add, change, or remove content per user intent; keep EARS-style and structure). Present the updated file. Say (friendly, first-person): *"Take a look at the updated requirements—when you're happy, I'll move on to the design."* End with **File to review:** [path to requirements.md]. **STOP and WAIT** for approval.
+- **C. Design update:** After approval, update **design.md** in the spec directory. Present it. Say (friendly, first-person): *"Here's the updated design. When you're good with it, I'll update the tasks."* End with **File to review:** [path to design.md]. **STOP and WAIT** for approval.
+- **D. Tasks update:** After approval, update **tasks.md** in the spec directory. Present it. Say (friendly, first-person): *"Here's the updated task list. When you're ready, you can run mcdev-3-build to build this feature."* End with **File to review:** [path to tasks.md]. **STOP and WAIT**. Do not create an improvement directory or run improvement build; the main spec was updated. User can run **mcdev-3-build [feature-name]** when they want to build.
+
+**Improvement path (spec built)** — Create an improvement spec and optionally run improvement build.
+
+4. **Improvement focus:** If the user did not give an improvement description, ask what they want to improve; **present example improvements as a markdown bullet list** (e.g. add keyboard shortcuts, support decimals, refactor state machine). **WAIT**.
+5. **Setup:** Create `.cursor/specs/[feature-name]/improvements/[improvement-id]/` and `improvement-meta.json` (parentFeature, improvementId, description, createdAt).
+6. **Improvement requirements:** Create **requirements.md** only (focused on the improvement). Follow project rules/instructions or best practices for the technology. Present it. Say (friendly, first-person): *"Take a look at the improvement requirements when you're ready—when you're happy, I'll move on to the design."* End with **File to review:** [path to file]. **STOP and WAIT** for approval.
+7. **Improvement design:** After approval, create **design.md** only. Present it. Say (friendly, first-person): *"Here's the improvement design. When you're good with it, I'll create the tasks."* End with **File to review:** [path to design.md]. **STOP and WAIT** for approval.
+8. **Improvement tasks:** After approval, create **tasks.md**. Present it. Say (friendly, first-person): *"Here are the improvement tasks. When you're ready, say 'approved' or 'run improvement' to build now (or 'run improvement in a folder X'). You can also run later: mcdev-3-build [feature-name] --improvement [improvement-id]."* End with **File to review:** [path to tasks.md]. **STOP and WAIT**.
+9. **If user says "run improvement" (or equivalent):** Run the build workflow for the **improvement** spec (spec directory = improvements/[id]/). When **implementing** improvement tasks, follow **project rules and instructions** (tech, architecture, design); if none, follow **best practices for the technology**. Build location = user-specified folder or **parent's** last-build outputDir. When all improvement tasks are done: **merge** improvement into the original spec (update original requirements, design, tasks); **archive** by moving `improvements/[id]/` to `archive/[id]/`; update parent last-build.json if same outputDir. **Then:** Run **After-build: .mcdev-steering refresh** (see above). Report (friendly, first-person): "I've merged the improvement into [feature]. Original spec is updated. Improvement archived at .cursor/specs/[feature]/archive/[id]."
+
+**Reference:** Use the **spec-improvement** skill (`.cursor/skills/spec-improvement/SKILL.md`) and **.cursor/specs/README-improvements.md** (if present).
+
+## mcdev-0-how-to-use command
+
+**Trigger:** Message starts with `mcdev-0-how-to-use` (with or without a space).
+
+**Action:** Present the content in **fun, friendly language** as specified in `.cursor/commands/mcdev-0-how-to-use.md`. Do not run any workflow. Structure: (1) **Title:** Welcome to mcdev. (2) **Intro:** Why "mc" (short for malchan); why malchan (combination of mom and dad's names); building things that help people solve real problems; helping vibe-coders and real-coders on AI coding tools. Link: https://malchan.com/dev (3) **How to use:** You just ran this—it explains all mcdev commands; run anytime for a memory refresher. (4) **Commands:** List Setup, Update .mcdev-steering, Prompt to spec, Spec-build, Prompt to improve, Spec-creation, Spec-improve in simple, friendly language. Mention project setup or best practices when no setup exists. Use the exact copy and tone from the command file; placeholders in square brackets [ ].
+
+0. **How to use (mcdev-0-how-to-use):** Explains all mcdev commands in simple language. Run anytime.
+0a. **Setup — start here (mcdev-1-setup-start-here):** Run once on a folder: if empty, the agent asks your tech (or picks based on product type) and creates .mcdev-steering with **all** steering files + cursor rules; if the project has code, the agent can add .mcdev-steering with all steering files and backfill specs for what's built, then show you the commands below.
+0b. **Update .mcdev-steering (mcdev-update-steering):** Run anytime to update **all** files in .mcdev-steering from the current project (never partial). Also runs automatically after each build so .mcdev-steering stays correct.
+1. **Prompt to spec (mcdev-2-prompt-to-spec):** Not sure how to phrase your idea? I'll chat with you for a message or two, shape it into a clear prompt, then offer to create the spec from it. Say yes and I run mcdev-create-spec with that prompt.
+2. **Spec-creation (mcdev-create-spec):** You describe a feature; the agent writes down what's needed (requirements), then how to build it (design), then a step-by-step task list. You approve after each part.
+3. **Spec-build (mcdev-3-build):** You give the name of a spec; the agent runs the tasks, runs tests, and reports what was built and where.
+4. **Prompt to improve (mcdev-4-prompt-to-improve-feature):** Not sure which feature or how to phrase the improvement? I'll ask which feature, find (or create/backfill) the spec, shape your improvement into a clear prompt, then run mcdev-improve-feature with it.
+5. **Spec-improve (mcdev-improve-feature):** You pick an existing spec and say what you want to improve; the agent creates a small improvement (requirements, design, tasks) with your approval at each step, then you can run that improvement; when done, changes are merged into the original spec and the improvement is archived.
+
+**Mention:** This follows the **project setup** (e.g. .cursorrules, project docs) when the project has one; **if there is no setup**, the agent uses **best practices in software development** for the technology.
+
+## Command summary (only these seven)
+
+| User types | Treat as | Do this |
+|------------|----------|--------|
+| `mcdev-1-setup-start-here` | Setup (start here) | Read project; fresh → .mcdev-steering with **all** steering files + rules + show commands; existing → ask then create/update **all** files in .mcdev-steering/ + backfill specs or just show commands. |
+| `mcdev-update-steering` | Update .mcdev-steering | Update **all** files in .mcdev-steering/ when run (create folder with all steering files if missing). Never partial. Also runs automatically after each build (mandatory full refresh). |
+| `mcdev-2-prompt-to-spec` | Prompt to spec | Chat to shape idea into a prompt; offer to run mcdev-create-spec with it; if yes, run spec-creation. |
+| `mcdev-create-spec [feature description]` | Spec-creation | Create new spec: Requirements → Design → Tasks (approval after each phase). |
+| `mcdev-3-build [feature-name]` | Spec-build | Run tasks from that spec, then tests, full report; then run After-build .mcdev-steering refresh. |
+| `mcdev-4-prompt-to-improve-feature` | Prompt to improve | Ask which feature; find or backfill spec; shape improvement prompt; confirm and run mcdev-improve-feature with it. |
+| `mcdev-improve-feature [feature-name]` | Spec-improve | Check spec + build status + project; if not built → update existing spec (requirements → design → tasks, confirm each); if built → improvement spec in three phases, then optionally run improvement and merge/archive; then run After-build .mcdev-steering refresh. |
+| `mcdev-0-how-to-use` | How to use | Explain the mcdev commands in simple language; project setup or best practices. |
+
+Do **not** hardcode a specs directory in this rule. Use project instructions; fallback: project root with best practices. Full behavior: this rule and .cursor/rules/spec-driven-development.mdc.

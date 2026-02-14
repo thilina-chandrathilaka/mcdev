@@ -1,0 +1,7 @@
+# Ignore if you ever add app or tooling to this repo
+node_modules/
+.next/
+.env
+.env.*
+*.log
+.DS_Store

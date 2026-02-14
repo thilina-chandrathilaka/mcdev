@@ -1,0 +1,458 @@
+---
+description: Spec-driven development workflow with mcdev-create-spec, mcdev-3-build commands, phase gating, and task execution
+alwaysApply: true
+---
+
+# Spec-Driven Development
+
+Follow this three-phase workflow for creating and implementing structured software specifications.
+
+**Building and specs:** For all mcdev commands (setup, update-steering, create, build, improve) and when implementing tasks: **always follow project rules and instructions** for **technology**, **architecture**, and **design**. Check .cursorrules, project docs, README, and existing specs. **If none are found**, follow **best practices in software development for the chosen technology** (e.g. language/framework conventions, project structure, testing).
+
+**Spec location:** Do not hardcode where specs live. Always **follow the project's instructions and rules** (e.g. .cursorrules "File Locations", project docs). If the project has **no** instructions, create specs at the **project root** following software development best practices (e.g. `specs/[feature-name]/` at root).
+
+## Commands (only these eight)
+
+### `mcdev-0-how-to-use` — how to use
+Explain the mcdev commands in very simple language. Run anytime. See .cursor/commands/mcdev-0-how-to-use.md and slash-commands.mdc.
+
+### `mcdev-1-setup-start-here` — setup (start here)
+Read project folder. If fresh → ask technology (or "you pick" → ask product type); create **.mcdev-steering/** with **all** steering files (technology.md, coding-practices.md, project.md, product-info.md, structure.md, architecture.md, error-handling.md, and any other files in .mcdev-steering/ when present); add to cursor rules; show mcdev commands. If existing → present **Option 1 [Highly recommended!]** (.mcdev-steering + backfill specs) and **Option 2** (show commands only); say that if they skip setup you'll only show commands but option 1 is the key to working well with you. If yes/option 1 → create/update **all** files in .mcdev-steering/ (never partial), add to cursor rules, backfill specs (all tasks [x]), show commands; if no/option 2 → show commands only. See .cursor/commands/mcdev-1-setup-start-here.md and slash-commands.mdc.
+
+### `mcdev-update-steering` — update .mcdev-steering
+When run, always update **all** files in .mcdev-steering/ (technology.md, coding-practices.md, project.md, product-info.md, structure.md, architecture.md, error-handling.md, and any other files in that folder). If .mcdev-steering/ missing → create it from codebase with all steering files. If exists → go through project and refresh every file; never partial. Run anytime; also runs automatically after each build (mandatory full refresh—see "After-build: .mcdev-steering refresh" in .cursor/rules/slash-commands.mdc). See .cursor/commands/mcdev-update-steering.md.
+
+### `mcdev-2-prompt-to-spec` — prompt to spec
+Chat with the user to shape their idea into a clear, effective prompt (1–2 exchanges); present the prompt; offer to run mcdev-create-spec with it. If they say yes, run the full spec-creation workflow. See .cursor/commands/mcdev-2-prompt-to-spec.md and slash-commands.mdc.
+
+### `mcdev-4-prompt-to-improve-feature` — prompt to improve
+Ask which feature to improve; find the spec (or create/backfill if missing); shape improvement prompt; confirm and run mcdev-improve-feature with it. See .cursor/commands/mcdev-4-prompt-to-improve-feature.md and slash-commands.mdc.
+
+### `mcdev-create-spec [feature-description]` — spec-creation
+Create a new spec with Requirements → Design → Tasks phases (approval after each).
+
+### `mcdev-3-build [feature-name]` — spec-build
+Execute all incomplete tasks from an approved spec; run tests; full report. **After build completes:** run **After-build: .mcdev-steering refresh** (all files in .mcdev-steering/ + cursor rules; see slash-commands.mdc). Use `--improvement [id]` to build an improvement spec; when done, merge into original and archive.
+
+### `mcdev-improve-feature [feature-name]` — spec-improve
+Check spec, build status, and project folder to see if the spec was built. If **not built** → update existing spec in place (requirements update → confirm, design update → confirm, tasks update → confirm); user can then run mcdev-3-build. If **built** → create improvement spec in three phases (requirements → design → tasks, approval after each); optionally run improvement build, then merge into original and archive. **After improvement build completes:** run **After-build: .mcdev-steering refresh** (see slash-commands.mdc). See .cursor/specs/README-improvements.md (if present).
+
+### `mcdev-0-how-to-use` — how to use
+Explain all mcdev commands in **very simple language**. Mention: follows **project setup** when the project has one; **if no setup**, uses **best practices in software development**.
+
+---
+
+## Behavior 1: mcdev-create-spec Command Handler
+
+When user types `mcdev-create-spec [feature-description]`:
+
+1. Extract feature name and convert to kebab-case (e.g., "user auth" → "user-auth")
+2. Use **project instructions** for spec directory (or project root best practices if none). Create that directory for the feature.
+3. **In all phases (Requirements, Design, Tasks):** Follow **project rules and instructions** (tech, architecture, design); if none are present, follow **best practices in software development for the technology chosen**.
+4. Start Requirements Phase
+
+---
+
+## Behavior 2: mcdev-3-build Command Handler
+
+When user types `mcdev-3-build [feature-name]` (optionally with "in a folder X" or `--improvement [improvement-id]`):
+
+1. **Parse** for feature name, build output folder, and optional **--improvement [id]**. If `--improvement [id]` is present, **spec directory** = `.cursor/specs/[feature-name]/improvements/[id]/` (parent = `.cursor/specs/[feature-name]/`). Otherwise use **project instructions** to locate the spec directory (the main spec). Verify requirements.md, design.md, tasks.md exist in the spec directory. Read all three. **Check last build:** for build location, use last-build.json in the **spec directory** (for main spec) or in the **parent** spec directory (for improvement); note **builtAt** and **outputDir** (see .cursor/specs/README-build-record.md).
+2. **Ask the user:** *"Should I complete all tasks (including optional) or skip optional tasks?"* **WAIT** for the user's answer. **Build location** = user-specified folder, or (for improvement) parent's last-build.json outputDir, or last-build.json's outputDir, or default (e.g. feature name).
+3. **If all selected tasks are already complete:** Run the full test suite from the build location; report with **last build: time** and **location**. Run **After-build: .mcdev-steering refresh** (see slash-commands.mdc). End (friendly, first-person) with *"Build complete! I've finished all tasks. Tests only (no pending tasks)."* Do not re-run tasks; do not overwrite last-build.json. **If this was an improvement build:** run **merge and archive** (merge improvement into original spec, move improvements/[id]/ to archive/[id]/; update parent last-build.json if same outputDir); run **After-build: .mcdev-steering refresh**; report "I've merged the improvement and archived it."
+4. **If there are incomplete selected tasks:** **Create a to-do list in the chat** (e.g. using TodoWrite) with one item per selected task (short labels from the task list). Update it as you go: set the current task to in progress when starting, and to completed when done—so the user sees the same clear progress as in mcdev-create-spec. For each in order:
+   - **Update tasks.md file**: Change status from `[ ]` to `[-]`
+   - **Update to-do list**: Mark current task in progress
+   - State which requirement(s) being addressed
+   - **Implement the task** following **project rules and instructions** (tech, architecture, design); if none, follow **best practices for the technology**
+   - Write tests
+   - Run tests
+   - **Update tasks.md file**: Change status from `[-]` to `[x]`
+   - **Update to-do list**: Mark current task completed
+   - Report progress
+5. When all selected tasks complete: run the full test suite from the build location; **write or update last-build.json** in the **spec directory** (for main spec) or in the **parent** spec directory (for improvement). **If this was an improvement build:** run **merge and archive** (merge improvement into original requirements/design/tasks; move improvements/[id]/ to archive/[id]/); run **After-build: .mcdev-steering refresh** (see slash-commands.mdc); report (friendly, first-person) "I've merged the improvement into [feature]. Original spec is updated. Archived at .cursor/specs/[feature]/archive/[id]." **Full report:** feature name, spec path, **built at**, **location**, tasks completed, test run summary. **After any build:** run **After-build: .mcdev-steering refresh** (update every file in .mcdev-steering/ and ensure cursor rules reference it; see slash-commands.mdc). End (friendly, first-person) with *"Build complete! I've finished all tasks."* or *"Build complete; tests failed: [brief summary]."*
+
+---
+
+## Behavior 2a: mcdev-improve-feature Command Handler
+
+When user types `mcdev-improve-feature [feature-name]` (optionally with improvement description, e.g. "add keyboard shortcuts"):
+
+**First** check spec, build status, and project folder. **Never** proceed to the next phase without explicit user confirmation.
+
+1. **Locate spec and read:** Resolve `.cursor/specs/[feature-name]/`. Verify requirements.md, design.md, tasks.md exist. Read them and, if present, last-build.json (builtAt, outputDir).
+2. **Check if spec was built:** Consider: last-build.json exists with valid outputDir; tasks mostly [x]; project folder has implementation (outputDir or feature code). If **no last-build** or **outputDir missing** or **most tasks [ ]** → **spec not built**.
+3. **Report and decide:** Report feature name, spec path, task summary, last build (or "No previous build"). State **not built** or **built**. If **not built** → **Spec-update path**. If **built** → **Improvement path**.
+
+**Spec-update path (spec not built):** Ask what to change if needed. Then: **Requirements update** → update requirements.md in place → present → **File to review** → WAIT. **Design update** → update design.md in place → present → WAIT. **Tasks update** → update tasks.md in place → present → WAIT. Say user can run mcdev-3-build when ready. Do not create improvements/ or run improvement build.
+
+**Improvement path (spec built):** Ask improvement focus if needed. Create `.cursor/specs/[feature-name]/improvements/[improvement-id]/` and improvement-meta.json. **Improvement requirements** → present → WAIT. **Improvement design** → present → WAIT. **Improvement tasks** → present → WAIT, then suggest run improvement. If user says "run improvement": run build for improvement spec; when done, **merge** into original, **archive** improvements/[id] to archive/[id], update parent last-build.json if same outputDir; run **After-build: .mcdev-steering refresh** (see slash-commands.mdc). Report: "I've merged the improvement into [feature]. Original spec updated. Archived at .cursor/specs/[feature]/archive/[id]."
+
+**Reference:** .cursor/skills/spec-improvement/SKILL.md and .cursor/specs/README-improvements.md (if present). **One source of truth:** after merge, the original spec is the single source of truth; archive is historical only.
+
+---
+
+## Behavior 2b: mcdev-0-how-to-use Command Handler
+
+When user types **mcdev-0-how-to-use** (with or without a space):
+
+**Action:** Present the content in **fun, friendly language** as specified in `.cursor/commands/mcdev-0-how-to-use.md`. Do not run any workflow. Include: **Title:** Welcome to mcdev. **Intro:** Why "mc" (malchan), why malchan (mom + dad's names), building things that help people solve real problems, helping vibe-coders and real-coders on AI coding tools; link https://malchan.com/dev **How to use:** You just ran this—memory refresher for all mcdev commands. **Commands:** Setup, Update .mcdev-steering, Spec-creation, Spec-build, Spec-improve in simple, friendly language. Mention project setup or best practices when no setup exists.
+
+---
+
+## Behavior 3: Phase Gating (CRITICAL)
+
+**NEVER proceed to the next phase without explicit user confirmation.**
+
+When asking the user to review a file (requirements, design, or tasks), **end your message with:** **File to review:** [path to the file].
+
+- After creating requirements.md → Present → end with **File to review:** [path] → WAIT for user approval
+- After creating design.md → Present → end with **File to review:** [path] → WAIT for user approval
+- After creating tasks.md → Present → end with **File to review:** [path] → WAIT for user approval
+
+The **same gating applies to mcdev-improve-feature**: after improvement requirements/design/tasks → present → end with **File to review:** [path] → WAIT; then (for tasks) suggest build (run improvement).
+
+Wait for explicit approval words like: "looks good", "approved", "yes", "proceed", "let's go"
+
+---
+
+## Behavior 4: Requirements Phase
+
+Follow **project rules and instructions** (tech, architecture, design); if none are present, follow **best practices in software development for the technology chosen**.
+
+**Requirements writing standard (EARS):** Use **EARS-style** statements where applicable: **WHEN [condition] THE SYSTEM SHALL [expected behavior]**. Each requirement must be testable and specific—avoid vague terms (e.g. "user-friendly", "fast"); specify exact behaviors, error messages, and performance where relevant. Include valid inputs, validation errors, boundary conditions, and edge cases. Organize requirements by functional area or feature.
+
+1. Ask clarifying questions about:
+   - What does this feature do?
+   - Who will use it?
+   - What are the acceptance criteria (testable, specific)?
+   - What are the constraints?
+   - What is out of scope?
+   - Edge cases and error conditions?
+
+2. Create `.cursor/specs/[feature-name]/requirements.md` with:
+
+```markdown
+# Feature: [Name]
+
+## Overview
+[Brief description]
+
+## User Stories
+- As a [user], I want to [action] so that [benefit]
+
+## Requirements (EARS-style where applicable)
+Organize by functional area. Use: WHEN [condition] THE SYSTEM SHALL [expected behavior].
+- WHEN [valid case] THE SYSTEM SHALL [exact behavior]
+- WHEN [validation error / edge case] THE SYSTEM SHALL [exact error or behavior]
+Specify exact messages, limits, or performance where relevant (e.g. "within 2 seconds", "display 'Invalid email format' below field").
+
+## Acceptance Criteria
+
+### 1. [Criterion Name]
+[Description]
+
+**Testability**: [How to verify this]
+
+## Constraints
+- [Technical or business constraints]
+
+## Out of Scope
+- [What is NOT included]
+```
+
+3. Present the document to user
+4. Say (friendly, first-person): "Take a look at the requirements when you're ready—when you're happy with them, I'll move on to design." End with **File to review:** [path to requirements.md] (e.g. `.cursor/specs/[feature-name]/requirements.md`).
+5. **STOP and WAIT** - Do NOT proceed until user confirms
+
+---
+
+## Behavior 5: Design Phase
+
+Follow **project rules and instructions** (tech, architecture, design); if none are present, follow **best practices in software development for the technology chosen**.
+
+**Design standards:** Include Architecture Overview (integration points; use diagrams e.g. Mermaid where helpful), Components with clear interfaces and responsibilities, Data Models/schemas, API or contract specifications (inputs, outputs, validation), at least one **Correctness Property** (linked to requirements), Testing Strategy, Error Handling, Security and Performance considerations. Plan for failure and scale where relevant.
+
+1. Read the confirmed requirements.md
+2. Create `.cursor/specs/[feature-name]/design.md` with:
+
+```markdown
+# Design: [Name]
+
+## Architecture Overview
+[High-level approach; integration points; optional: Mermaid or text diagram]
+
+## Data Models
+[Type definitions / schemas]
+
+## API or Contract Specifications (if applicable)
+[Inputs, outputs, validation, rate limits]
+
+## Components
+
+### Component: [Name]
+**Purpose**: [What it does]
+**Responsibilities**:
+- [Responsibility 1]
+- [Responsibility 2]
+
+**Interfaces**:
+[Code signatures]
+
+## Correctness Properties (REQUIRED)
+
+### Property 1.1: [Name]
+**Validates**: Requirements [X.Y]
+**Specification**: [Universal statement that must be true]
+**Example**: [Concrete demonstration]
+**Test Strategy**: [How to test this property]
+
+## Testing Strategy
+[Unit, property-based, and integration testing plans]
+
+## Error Handling
+[Error handling approach]
+
+## Security Considerations
+[Security concerns and mitigations]
+
+## Performance Considerations
+[Performance requirements and approach]
+```
+
+3. **CRITICAL**: Design MUST include at least one Correctness Property
+   - Categories: Reversibility, Idempotence, Invariants, Commutativity, Associativity
+   - Example: `decode(encode(x)) === x` (Reversibility)
+4. Present the document to user
+5. Say (friendly, first-person): "Here's the design. When you've had a look and you're good with it, I'll create the tasks." End with **File to review:** [path to design.md].
+6. **STOP and WAIT** - Do NOT proceed until user confirms
+
+---
+
+## Behavior 6: Tasks Phase
+
+Follow **project rules and instructions** (tech, architecture, design); if none are present, follow **best practices in software development for the technology chosen**.
+
+**Task standards:** Break work into specific, actionable, verifiable tasks. Group by area (e.g. Setup, Core Implementation, Testing, Integration, Documentation). Order logically (dependencies first). Link each task to requirements or design properties ("Addresses: Requirements X.Y" or "Validates: Property X.Y from design"). Include quality tasks (unit tests, property-based tests, documentation). Mark optional tasks with `*`.
+
+1. Read the confirmed design.md
+2. Create `.cursor/specs/[feature-name]/tasks.md` with:
+
+```markdown
+# Tasks: [Name]
+
+## 1. Setup
+- [ ] 1.1 Install dependencies
+  - Addresses: Requirements [X.Y]
+- [ ] 1.2 Create project structure
+
+## 2. Core Implementation
+- [ ] 2.1 Implement Component A
+  - Addresses: Requirements [X.Y]
+- [ ] 2.2 Implement Component B
+  - Addresses: Requirements [X.Y]
+
+## 3. Testing
+- [ ] 3.1 Unit tests for Component A
+  - Addresses: Requirements [X.Y]
+- [ ] 3.2 Property test for Property 1.1
+  - Validates: Property 1.1 from design
+- [ ] 3.3 Integration tests
+
+## 4. Documentation
+- [ ] 4.1 Code comments
+- [ ] 4.2 API documentation
+
+## 5. Optional
+- [ ]* 5.1 Performance optimization
+- [ ]* 5.2 Additional features
+```
+
+3. **CRITICAL**: Link each task to requirements
+   - Implementation tasks: "Addresses: Requirements X.Y"
+   - Property test tasks: "Validates: Property X.Y from design"
+4. Mark optional tasks with `*` after the checkbox: `[ ]*`
+5. Present the document to user
+6. Say (friendly, first-person): "Here's the task list. When you're ready to go, say the word and I'll start building." End with **File to review:** [path to tasks.md].
+7. **STOP and WAIT** - Do NOT proceed until user confirms
+
+---
+
+## Behavior 7: Task Execution (Single Task)
+
+When user says "implement task X.Y":
+
+1. **Read requirements.md and design.md FIRST** to understand context
+2. **Create a to-do list in the chat** (e.g. using TodoWrite) with one item for this task; set it to in progress when starting and to completed when done.
+3. **Update tasks.md file**: Change task status from `[ ]` to `[-]` (in progress). **Update to-do list**: Mark task in progress.
+4. State: "Implementing task X.Y to address Requirements A.B"
+5. Implement the task
+6. Write tests (unit tests and property-based tests if applicable)
+7. Run tests and verify they pass
+8. **Update tasks.md file**: Change task status from `[-]` to `[x]` (complete). **Update to-do list**: Mark task completed.
+9. Say (friendly, first-person): "Task X.Y is done. Ready for the next one when you are."
+10. **STOP** - Do NOT continue to next task automatically
+
+---
+
+## Behavior 8: Build Execution Details
+
+For `mcdev-3-build`, apply the same rules as single task execution but continue automatically:
+
+- **Create and maintain a to-do list in the chat** (e.g. TodoWrite): one item per selected task, updated to in progress when starting each task and to completed when done—same clear progress view as mcdev-create-spec.
+- Read requirements + design before starting
+- Update tasks.md status for each task (`[ ]` → `[-]` → `[x]`)
+- State which requirements each task addresses
+- Write and run tests
+- Report progress after each task
+- Stop immediately if any task fails (except optional tasks)
+- When complete (friendly, first-person): "Build complete! I've finished all tasks."
+
+---
+
+## Behavior 9: Traceability
+
+**Always maintain clear links between requirements, design, and implementation.**
+
+When implementing:
+- Say: "Implementing task X.Y to address Requirements A.B"
+- Explain what requirement you're satisfying
+
+When writing property tests:
+- Say: "This validates Property X.Y from the design"
+- Link test to specific property in design.md
+
+When writing unit tests:
+- Say: "This tests Requirements X.Y"
+- Link test to specific acceptance criteria
+
+Maintain the chain: Requirements → Design Properties → Tasks → Implementation → Tests
+
+---
+
+## Task Status Syntax
+
+Use these exact formats in tasks.md:
+
+- `[ ]` = Not started
+- `[-]` = In progress (currently working on)
+- `[x]` = Completed
+- `[ ]*` = Optional task
+
+**CRITICAL**: You MUST physically edit the tasks.md file when task status changes:
+- Before starting a task: Change `[ ]` to `[-]` in the file
+- After completing a task: Change `[-]` to `[x]` in the file
+- This keeps the file synchronized with actual progress so users can track status
+
+---
+
+## File Locations
+
+All specs are stored in **`.cursor/specs/`**:
+
+```
+.cursor/specs/
+├── feature-name/
+│   ├── requirements.md
+│   ├── design.md
+│   └── tasks.md
+```
+
+Create the `.cursor/specs/` directory when creating the first spec if it doesn't exist.
+
+---
+
+## Correctness Properties Reference
+
+Design phase must include at least one property. Common categories:
+
+- **Reversibility**: `decode(encode(x)) === x`
+- **Idempotence**: `f(f(x)) === f(x)`
+- **Invariants**: Relationships that always hold (e.g., `length(concat(a,b)) === length(a) + length(b)`)
+- **Commutativity**: `f(a,b) === f(b,a)`
+- **Associativity**: `f(f(a,b),c) === f(a,f(b,c))`
+
+Each property must include:
+- Link to requirements it validates
+- Formal specification
+- Concrete example
+- Test strategy
+
+---
+
+## Communication Guidelines
+
+Use a **fun, friendly tone** and first-person (I/you). Be conversational and natural.
+
+### DO Say (friendly, first-person)
+- "Take a look at the requirements when you're ready—when you're happy with them, I'll move on to design."
+- "Here's the design. When you've had a look and you're good with it, I'll create the tasks."
+- "Here's the task list. When you're ready to go, say the word and I'll start building."
+- "Implementing task X.Y to address Requirements A.B"
+- "Task X.Y is done. Ready for the next one when you are."
+
+### DON'T Say
+- "Now we're in Phase 2..."
+- "Following the workflow..."
+- "Step 3 requires..."
+- "According to the spec process..."
+
+Don't reference the methodology explicitly. Sound like a person helping, not a system reading a script.
+
+---
+
+## Critical Rules Summary
+
+1. **Phase Gating**: NEVER proceed without explicit user confirmation
+2. **Correctness Properties**: Design MUST include at least one testable property
+3. **One Task at a Time**: Implement one task, then STOP and WAIT (unless using mcdev-3-build)
+4. **Update tasks.md**: Always edit the file to reflect current task status
+5. **Traceability**: Always state which requirements you're addressing
+6. **Testing Required**: Write and run tests before marking task complete
+7. **Specs in .cursor**: Use `.cursor/specs/[feature-name]/`
+
+---
+
+## Example Workflow
+
+```
+User: mcdev-create-spec user authentication
+
+You: [Ask questions about authentication requirements]
+You: [Create .cursor/specs/user-authentication/requirements.md]
+You: "Take a look at the requirements when you're ready—when you're happy with them, I'll move on to design."
+You: **File to review:** .cursor/specs/user-authentication/requirements.md
+[WAIT]
+
+User: "looks good"
+
+You: [Create .cursor/specs/user-authentication/design.md with Correctness Properties]
+You: "Here's the design. When you've had a look and you're good with it, I'll create the tasks."
+You: **File to review:** .cursor/specs/user-authentication/design.md
+[WAIT]
+
+User: "approved"
+
+You: [Create .cursor/specs/user-authentication/tasks.md with requirement links]
+You: "Here's the task list. When you're ready to go, say the word and I'll start building."
+You: **File to review:** .cursor/specs/user-authentication/tasks.md
+[WAIT]
+
+User: "let's proceed"
+
+You: "Which task would you like me to start with?"
+[WAIT]
+
+User: "implement task 2.1"
+
+You: [Update tasks.md: task 2.1 status to [-]]
+You: "Implementing task 2.1 to address Requirements 1.1 (User Login)."
+You: [Implement, write tests, run tests]
+You: [Update tasks.md: task 2.1 status to [x]]
+You: "Task 2.1 is done. Ready for the next one when you are."
+[STOP]
+```
+
+---
+
+**Remember**: Always wait for user approval between phases. One task at a time unless using `mcdev-3-build`. Update tasks.md file status. Maintain traceability.

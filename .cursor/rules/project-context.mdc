@@ -1,0 +1,13 @@
+# Project context (.mcdev-steering)
+
+When making decisions about **technology**, **architecture**, **structure**, or **coding style**, read and follow these files when present:
+
+- **.mcdev-steering/technology.md** — Stack, versions, tooling, conventions.
+- **.mcdev-steering/coding-practices.md** — Style, testing, structure, quality.
+- **.mcdev-steering/project.md** — Goals, scope, product type, decisions log.
+- **.mcdev-steering/product-info.md** — What the product is: name, brief description, main value, high-level features (kept in sync when building with mcdev commands).
+- **.mcdev-steering/structure.md** — Project structure: folder layout, key paths, conventions.
+- **.mcdev-steering/architecture.md** — Architecture overview, components, data flow, integration points.
+- **.mcdev-steering/error-handling.md** — Error handling practices and patterns.
+
+Use them for mcdev-create-spec (requirements, design, tasks), mcdev-3-build (implementation), and mcdev-improve-feature. If a file is missing, follow best practices for the technology already chosen (e.g. Next.js + TypeScript).

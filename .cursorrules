@@ -1,0 +1,71 @@
+# --- mcdev (start) ---
+# mcdev (Spec-Driven Development)
+
+This project uses **mcdev** for spec-driven development. When the user runs any mcdev command (or asks to implement a task as part of a build), follow these rules and the references below.
+
+## Tone for mcdev commands
+
+Use a **fun, friendly tone** and first-person (I/you): **I** when the agent is doing something, **you** when addressing the user. Keep messages clear and warm. Apply to setup, create, build, improve, update-steering, and how-to-use.
+
+## Communication (markdown / Cursor-friendly)
+
+When showing **multiple examples** or **options** to the user in chat, use **markdown bullet points** so they render clearly in Cursor:
+
+- Use a short intro line, then a bullet list (e.g. `- **React + TypeScript**` or `- Option 1 — …`).
+- Keep each bullet to one line where possible; use **bold** for the choice or key phrase.
+- Avoid long comma-separated runs (e.g. prefer bullets over "e.g. A, B, C, D").
+
+## Project rules and technology
+
+**All mcdev commands and task implementation must:**
+
+- Follow **project rules and instructions** for technology, architecture, and design (check .cursorrules, project docs, README, existing specs, codebase).
+- If none are found, follow **best practices in software development for the chosen technology**. Do not introduce a different tech stack or architecture unless the spec or project allows it.
+
+## Commands (recognize these eight)
+
+When the user message **starts with** one of these (with or without a space after), treat it as a slash command. See **.cursor/rules/slash-commands.mdc** for full behavior.
+
+| Command | Purpose |
+|--------|--------|
+| **mcdev-0-how-to-use** | Explain mcdev commands in simple language. |
+| **mcdev-1-setup-start-here** | Setup: read project; if fresh → ask tech (or "you pick"), create .mcdev-steering/ and cursor rules, show commands; if existing → offer .mcdev-steering + backfill specs or show commands only. |
+| **mcdev-update-steering** | Refresh all .mcdev-steering files from the project; create if missing. Runs automatically after each build. |
+| **mcdev-2-prompt-to-spec** | Chat to shape the user's idea into a prompt, then offer to run mcdev-create-spec with it. |
+| **mcdev-create-spec [description]** | Create a new spec: Requirements → Design → Tasks, with approval after each phase. |
+| **mcdev-3-build [feature-name]** | Run tasks from the spec (or improvement with --improvement [id]), then tests and report; merge/archive when improvement build completes. |
+| **mcdev-4-prompt-to-improve-feature** | Ask which feature; find or backfill spec; shape improvement prompt; run mcdev-improve-feature with it. |
+| **mcdev-improve-feature [feature-name]** | Check spec and build status; if not built → update existing spec (requirements → design → tasks, confirm each); if built → improvement spec (requirements → design → tasks), then suggest run improvement and merge/archive. |
+
+**Spec location:** Use **this project's instructions** (see File Locations below). If the project has none, use project root with best practices (e.g. `specs/[feature-name]/` at root). Do not hardcode folder creation in this file.
+
+## Phase gating (critical)
+
+Never move to the next phase without explicit user confirmation.
+
+When asking the user to review a requirements, design, or tasks file, **end your message with:**  
+**File to review:** [path to the file]
+
+- After **requirements.md** → present → end with File to review → STOP and WAIT.
+- After **design.md** → present → end with File to review → STOP and WAIT.
+- After **tasks.md** → present → end with File to review → STOP and WAIT.
+
+Wait for approval (e.g. "looks good", "approved", "yes", "proceed", "let's go").
+
+## Standards for specs
+
+When creating or updating specs: use **EARS-style** requirements where applicable; include **Correctness Properties** in design; link tasks to requirements/properties. See **.cursor/skills/** and **.cursor/rules/spec-driven-development.mdc** for full standards and workflows.
+
+## File locations (mcdev)
+
+- **Specs:** `.cursor/specs/[feature-name]/` with `requirements.md`, `design.md`, `tasks.md`. Create `.cursor/specs/` when creating the first spec if it does not exist.
+- **Steering:** `.mcdev-steering/` (technology.md, coding-practices.md, project.md, product-info.md, structure.md, architecture.md, error-handling.md).
+- **Commands:** `.cursor/commands/mcdev-*.md`.
+- **Rules:** `.cursor/rules/slash-commands.mdc`, `.cursor/rules/spec-driven-development.mdc`.
+
+## Where to get full behavior
+
+- **Setup, commands, workflows:** .cursor/rules/slash-commands.mdc and .cursor/commands/mcdev-*.md
+- **Spec creation, build, improve, property testing:** .cursor/skills/ (spec-creation, spec-execution, spec-improvement, spec-property-testing, spec-driven-development)
+- **Detailed phase behaviors and standards:** .cursor/rules/spec-driven-development.mdc
+# --- mcdev (end) ---
