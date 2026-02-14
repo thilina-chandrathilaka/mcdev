@@ -13,6 +13,13 @@
 
 **mcdev** brings **spec-driven development** into Cursor first—sorry Claude and others, you’ll get your turn later; I live in Cursor and love it, so Cursor gets the first slice. 🖤 You describe what you want, the agent turns it into requirements, design, and tasks, then you build from that together. No chaos, no guessing. Just a clear path from idea to shipped feature. 🛤️
 
+**Why it’s awesome:**
+
+- 🗣️ **Prompt to spec, prompt to improve** — Not sure how to phrase your idea (or your improvement)? Use **mcdev-2-prompt-to-spec** and **mcdev-4-prompt-to-improve-feature**. The agent chats with you, shapes it into a clear prompt, and runs the right command. Saves you a ton of head-scratching.
+- 📁 **`.mcdev-steering`** — One setup gives the Cursor agent everything it needs: tech, architecture, product, project, structure, error handling. The agent reads it and follows it. No more repeating yourself.
+- 📌 **Specs stay the single source of truth** — When you run an improvement (mcdev-improve-feature), the improvement is merged back into the original spec and archived. Your main spec is always up to date. No drift, no duplicate truths.
+- 🔄 **Steering stays in sync** — After every build you run with mcdev, `.mcdev-steering` is refreshed from your project. The agent’s context never goes stale.
+
 ---
 
 ## 💡 Why “mc”?
@@ -57,18 +64,10 @@ Placeholders like `[feature-name]` and `[description]` are just that—replace t
 Run this from your **project root** (the folder you open in Cursor):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_ORG/mcdev/main/scripts/install-mcdev.sh | MCDEV_REPO=YOUR_ORG/mcdev bash
+curl -fsSL https://raw.githubusercontent.com/thilina-chandrathilaka/mcdev/main/scripts/install-mcdev.sh | MCDEV_REPO=thilina-chandrathilaka/mcdev bash
 ```
 
-Replace **YOUR_ORG** with your GitHub org or username in both places (and change `main` if your default branch is different).
-
-**Private repo?** Set a GitHub token so the script can fetch the repo:
-
-```bash
-MCDEV_GITHUB_TOKEN=ghp_xxx curl -fsSL https://raw.githubusercontent.com/YOUR_ORG/mcdev/main/scripts/install-mcdev.sh | MCDEV_REPO=YOUR_ORG/mcdev bash
-```
-
-**Optional env vars:** `MCDEV_REPO`, `MCDEV_BRANCH`, `MCDEV_TARGET_DIR` — see the script or repo docs if you need to point at a different repo, branch, or directory.
+This repo is public, so the one-liner works from any terminal with no token. ✨
 
 ---
 
@@ -98,3 +97,7 @@ So you stay up to date without losing your other Cursor rules. 👍
 - **`scripts/install-mcdev.sh`** — The script that runs when you use the one-liner above.
 
 That’s it. Add it to your project, open Cursor, and run **mcdev-0-how-to-use** when you want a friendly reminder of what you can do. 💬
+
+---
+
+**License:** [MIT](LICENSE) — use it, change it, share it. No strings attached.
