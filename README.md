@@ -38,12 +38,15 @@ Or you're brand new to all of this and have no idea where to start.
 
 ## Why it's awesome
 
-| Feature | What it means |
+| Awesomeness | What it means |
 |--------|----------------|
 | **Prompt to spec, prompt to improve** | Not sure how to phrase your idea (or your improvement)? <br>• Use **mcdev-2-prompt-to-spec** and **mcdev-4-prompt-to-improve-feature**. <br>• The agent chats with you, shapes it into a clear prompt, and runs the right command. |
+| **You approve every step** | Requirements → design → tasks, with you saying "looks good" at each phase. <br>• The agent never moves on without your approval. No surprise runs. |
 | **`.mcdev-steering`** | One setup gives the Cursor agent everything it needs: tech, architecture, product, project, structure, error handling. <br>• The agent reads it and follows it. No more repeating yourself. |
+| **New project or existing code** | Same workflow. <br>• Empty folder? The agent sets up steering (and can pick tech for you). <br>• Already have code? Add steering and backfill specs for what you've built. |
 | **Specs stay the single source of truth** | When you run an improvement (mcdev-improve-feature), the improvement is merged back into the original spec and archived. <br>• Your main spec is always up to date. <br>• No drift, no duplicate truths. |
 | **Steering stays in sync** | After every build you run with mcdev, `.mcdev-steering` is refreshed from your project. <br>• The agent's context never goes stale. |
+| **Your project stays in charge** | mcdev follows your project rules (tech, architecture, design). <br>• No rules yet? The agent uses best practices for your stack. |
 
 ---
 
@@ -62,15 +65,15 @@ Your project stays in charge: mcdev follows your **project rules** (tech, archit
 ## Commands
 
 | Command | What it does |
-|--------|----------------|
-| **mcdev-0-how-to-use** | Your go-to reminder. Run this anytime to see what all the mcdev commands do. |
-| **mcdev-1-setup-start-here** | Run once on a folder.<br>• Empty project? <br>The agent asks what tech you want (or picks for you) and creates steering files.<br>• Already have code? <br>It can add steering and backfill specs for what you've built, then show you the rest. *Highly recommended* so the agent can work with you properly. |
-| **mcdev-2-prompt-to-spec** | Not sure how to phrase your idea?<br>• Chat for a message or two; the agent shapes it into a clear prompt and offers to create the spec.<br>• Say yes and it runs mcdev-create-spec with that. |
-| **mcdev-3-build** `[feature-name]` | You give the name of a spec; the agent runs the tasks, runs tests, and tells you what was built and where. |
-| **mcdev-4-prompt-to-improve-feature** | Not sure which feature or how to phrase the improvement?<br>• The agent asks which feature, finds (or backfills) the spec, shapes your improvement into a prompt, then runs mcdev-improve-feature when you say yes. |
-| **mcdev-create-spec** `[description]` | You describe a feature; the agent writes requirements, then design, then a step-by-step task list. You approve after each part. |
-| **mcdev-improve-feature** `[feature-name]` | You pick a spec and say what you want to improve.<br>• The agent drafts a small improvement (requirements, design, tasks) with your approval at each step.<br>• When you run it and it's done, the improvement is merged into the original spec and archived. One source of truth. |
-| **mcdev-update-steering** | Refreshes all files in `.mcdev-steering` from your current project.<br>• Run anytime; the agent also runs it automatically after each build. |
+|--------------|----------------|
+| **/mcdev-0-how-to-use** | Your go-to reminder. Run this anytime to see what all the mcdev commands do. |
+| **/mcdev-1-setup-start-here** | Run once on a folder.<br>• Empty project? <br>The agent asks what tech you want (or picks for you) and creates steering files.<br>• Already have code? <br>It can add steering and backfill specs for what you've built, then show you the rest. *Highly recommended* so the agent can work with you properly. |
+| **/mcdev-2-prompt-to-spec** | Not sure how to phrase your idea?<br>• Chat for a message or two; the agent shapes it into a clear prompt and offers to create the spec.<br>• Say yes and it runs mcdev-create-spec with that. |
+| **/mcdev-3-build** `[feature-name]` | You give the name of a spec; the agent runs the tasks, runs tests, and tells you what was built and where. |
+| **/mcdev-4-prompt-to-improve-feature** | Not sure which feature or how to phrase the improvement?<br>• The agent asks which feature, finds (or backfills) the spec, shapes your improvement into a prompt, then runs mcdev-improve-feature when you say yes. |
+| **/mcdev-create-spec** `[description]` | You describe a feature; the agent writes requirements, then design, then a step-by-step task list. You approve after each part. |
+| **/mcdev-improve-feature** `[feature-name]` | You pick a spec and say what you want to improve.<br>• The agent drafts a small improvement (requirements, design, tasks) with your approval at each step.<br>• When you run it and it's done, the improvement is merged into the original spec and archived. One source of truth. |
+| **/mcdev-update-steering** | Refreshes all files in `.mcdev-steering` from your current project.<br>• Run anytime; the agent also runs it automatically after each build. |
 
 Placeholders like `[feature-name]` and `[description]` are just that—replace them with your actual feature name or description.
 
