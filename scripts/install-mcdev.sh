@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# mcdev install script: fetch repo, overwrite .cursor with latest, merge .cursorrules (create / append / replace block).
+# mcdev install script: fetch repo, merge .cursor with latest (add/update, never delete existing), merge .cursorrules (create / append / replace block).
 # Run from your project root. Re-running updates mcdev files and merges the mcdev block in .cursorrules.
 set -e
 
@@ -45,11 +45,13 @@ if [ -z "$EXTRACTED" ] || [ ! -d "$EXTRACTED/.cursor" ]; then
   exit 1
 fi
 
-# Overwrite .cursor with repo version (apply diffs on re-run)
+# Merge .cursor: add/update repo files, never delete existing project files or folders
 mkdir -p "$TARGET_DIR/.cursor"
-rsync -a --delete "$EXTRACTED/.cursor/" "$TARGET_DIR/.cursor/" 2>/dev/null || {
-  cp -R "$EXTRACTED/.cursor/"* "$TARGET_DIR/.cursor/"
-}
+if command -v rsync >/dev/null 2>&1; then
+  rsync -a "$EXTRACTED/.cursor/" "$TARGET_DIR/.cursor/"
+else
+  cp -R "$EXTRACTED/.cursor/"* "$TARGET_DIR/.cursor/" 2>/dev/null || true
+fi
 
 # Merge .cursorrules
 REPO_CURSORRULES="$EXTRACTED/.cursorrules"
