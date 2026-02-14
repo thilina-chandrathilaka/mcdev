@@ -1,17 +1,21 @@
 # 👋 Welcome to mcdev
 
-**If you loved Kiro** and how it wrote and executed specs (requirements, design, tasks, build and update task file)…  
-**If you loved OpenSpec** and how it kept one source of truth while still letting you improve…  
-**If you loved Cursor** and how it could plan and execute with you…  
-**If you loved using ChatGPT and others** to craft better prompts to feed into Kiro, OpenSpec, or Cursor…  
+**If you loved** that thing that turned your idea into a real spec and then actually ran the tasks (requirements, design, tasks, build, update the checklist—the full loop)…  
+**If you loved** the idea of one spec to rule them all, but still being able to improve it without spawning five conflicting copies…  
+**If you loved** coding in an editor where the AI could both plan *and* execute with you instead of just talking about it…  
+**If you loved** using another bot to wordsmith the *perfect* prompt before pasting it into your coding AI (we’ve all been there)…  
 **If you’ve found** that giving agents clear steering (tech, architecture, product, project, structure, error handling) makes your work cleaner…  
+
 **Or if you’re brand new** to all of this and have no idea where to start… 🌱
 
-**This is that—just the great stuff.** ✨ All of it, in one place.
+**This is that—just the great stuff.** 
+✨ All of it, in one place.
 
 ---
 
-**mcdev** brings **spec-driven development** into Cursor first—sorry Claude and others, you’ll get your turn later; I live in Cursor and love it, so Cursor gets the first slice. 🖤 You describe what you want, the agent turns it into requirements, design, and tasks, then you build from that together. No chaos, no guessing. Just a clear path from idea to shipped feature. 🛤️
+**mcdev** brings **spec-driven development** into Cursor first—sorry Claude and others, you’ll get your turn later; I live in Cursor and love it, so Cursor gets the first slice. 
+
+🖤 You describe what you want, the agent turns it into requirements, design, and tasks, then you build from that together. No chaos, no guessing. Just a clear path from idea to shipped feature. 🛤️
 
 **Why it’s awesome:**
 
