@@ -104,7 +104,9 @@ So you stay up to date without losing your other Cursor rules.
 
 **mc** is short for **malchan**—a mix of my mom's and dad's names. I've always wanted to build things that help people solve real problems. mcdev is part of that: helping both vibe-coders and real-coders get the most out of AI coding tools.
 
-You can read the full story here: **[malchan.com/dev](https://malchan.com/dev)** (it's going to land on a 404 for now—I'll build that with mcdev later).
+You can read the full story here: **[malchan.com/dev](https://malchan.com/mcdev)** 
+
+(Built this with Kimi and /mcdev on Cursor).
 
 ---
 
