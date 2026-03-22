@@ -6,7 +6,7 @@ If you think you’ve found a security issue in mcdev (for example in the instal
 
 **How to report:**
 
-1. Open the [**Security**](https://github.com/thilina-chandrathilaka/mcdev/security) tab of this repository.
+1. Open the [**Security**](https://github.com/malchan-git/mcdev/security) tab of this repository.
 2. Click **Report a vulnerability**.
 3. Fill in the form (title, description, and any steps to reproduce) and submit.
 

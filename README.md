@@ -7,7 +7,7 @@
 Run this from your **project root** (the folder you open in Cursor):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/thilina-chandrathilaka/mcdev/main/scripts/install-mcdev.sh | MCDEV_REPO=thilina-chandrathilaka/mcdev bash
+curl -fsSL https://raw.githubusercontent.com/malchan-git/mcdev/main/scripts/install-mcdev.sh | MCDEV_REPO=malchan-git/mcdev bash
 ```
 
 This repo is public, so the one-liner works from any terminal with no token.
@@ -84,7 +84,7 @@ Placeholders like `[feature-name]` and `[description]` are just that—replace t
 Re-run the same command anytime to update—your .cursorrules merges cleanly without overwriting your custom rules:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/thilina-chandrathilaka/mcdev/main/scripts/install-mcdev.sh | MCDEV_REPO=thilina-chandrathilaka/mcdev bash
+curl -fsSL https://raw.githubusercontent.com/malchan-git/mcdev/main/scripts/install-mcdev.sh | MCDEV_REPO=malchan-git/mcdev bash
 ```
 
 ---
